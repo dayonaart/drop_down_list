@@ -33,19 +33,20 @@ class DropDown {
   /// This will set the background color to the dropdown.
   final Color dropDownBackgroundColor;
   final bool isExpanded;
-  DropDown({
-    Key? key,
-    required this.data,
-    this.selectedItems,
-    this.listBuilder,
-    this.enableMultipleSelection = false,
-    this.bottomSheetTitle,
-    this.submitButtonChild,
-    this.searchWidget,
-    this.isSearchVisible = true,
-    this.dropDownBackgroundColor = Colors.transparent,
-    this.isExpanded = false,
-  });
+  final initialExpandSize;
+  DropDown(
+      {Key? key,
+      required this.data,
+      this.selectedItems,
+      this.listBuilder,
+      this.enableMultipleSelection = false,
+      this.bottomSheetTitle,
+      this.submitButtonChild,
+      this.searchWidget,
+      this.isSearchVisible = true,
+      this.dropDownBackgroundColor = Colors.transparent,
+      this.isExpanded = false,
+      this.initialExpandSize = 0.5});
 }
 
 class DropDownState {
@@ -96,9 +97,10 @@ class _MainBodyState extends State<MainBody> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: widget.dropDown.isExpanded ? 0.75 : 0.3,
-      // minChildSize: 0.13,
-      maxChildSize: widget.dropDown.isExpanded ? 1 : 0.3,
+      initialChildSize: widget.dropDown.initialExpandSize,
+      maxChildSize:
+          widget.dropDown.isExpanded ? 1 : widget.dropDown.initialExpandSize,
+      minChildSize: widget.dropDown.initialExpandSize,
       expand: false,
       builder: (BuildContext context, ScrollController scrollController) {
         return Column(
@@ -166,20 +168,6 @@ class _MainBodyState extends State<MainBody> {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Container(
-                            height: 20,
-                            width: 20,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.blue),
-                            child: Center(
-                              child: Text(
-                                "${index + 1}",
-                                style: const TextStyle(
-                                    fontSize: 8, color: Colors.white),
-                              ),
-                            )),
-                      ),
                       Expanded(
                         flex: 4,
                         child: InkWell(
